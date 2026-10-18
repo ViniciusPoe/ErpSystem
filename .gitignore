@@ -1,0 +1,21 @@
+# Segredos locais
+.env
+*.local.json
+
+# Build
+bin/
+obj/
+*.log
+
+# IDE / ferramentas locais
+.vs/
+.vscode/
+.idea/
+*.user
+.dotnet/
+.nuget/
+.templateengine/
+.claude/
+
+# Utilitários temporários
+tools/

@@ -1,0 +1,129 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.ProductCatalogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,8">
+            <TextBlock FontSize="24" FontWeight="SemiBold" Foreground="#132A3A">Cadastro de Produtos</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <Button x:Name="NewButton" Padding="14,6" Style="{StaticResource PrimaryButton}" Click="NewButton_Click">+ Novo</Button>
+                <Button x:Name="EditButton" Margin="8,0,0,0" Padding="14,6" Click="EditButton_Click" IsEnabled="False">&#9998; Editar</Button>
+            </StackPanel>
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,8" LastChildFill="False">
+            <TextBox x:Name="SearchTextBox" Width="260" Padding="8,4" TextChanged="SearchTextBox_TextChanged" ToolTip="Buscar por codigo, SKU, nome, classificacao ou codigo de barras"/>
+        </DockPanel>
+
+        <Border x:Name="FormPanel" Grid.Row="2" Margin="0,0,0,10" Padding="10" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8" Visibility="Collapsed">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="420">
+                <StackPanel>
+                    <TextBlock x:Name="FormTitle" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,6">Novo Produto</TextBlock>
+
+                    <!-- Row 1: Codigo, SKU, Nome, Codigo de Barras -->
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Codigo (automatico)</TextBlock><TextBox x:Name="CodeTextBox" IsReadOnly="True" Background="#EEEEEE"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">SKU *</TextBlock><TextBox x:Name="SkuTextBox"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Nome *</TextBlock><TextBox x:Name="NameTextBox"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Codigo de Barras</TextBlock><TextBox x:Name="BarcodeTextBox"/></StackPanel>
+                    </UniformGrid>
+
+                    <!-- Row 2: Descricao (full width) -->
+                    <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Descricao</TextBlock><TextBox x:Name="DescriptionTextBox" TextWrapping="Wrap" AcceptsReturn="True" Height="50"/></StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="4,2,4,0">
+                        <CheckBox x:Name="IsActiveCheckBox" Content="Cadastro ativo" IsChecked="True"/>
+                    </StackPanel>
+
+                    <!-- Row 3: Precos e Margem -->
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Preco de Venda</TextBlock><TextBox x:Name="UnitPriceTextBox" Text="0,00"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Preco de Custo</TextBlock><TextBox x:Name="CostPriceTextBox" Text="0,00"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Margem de Lucro (%)</TextBlock><TextBox x:Name="MarginTextBox" IsReadOnly="True" Background="#EEEEEE"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">NCM</TextBlock><TextBox x:Name="NcmTextBox" MaxLength="20"/></StackPanel>
+                    </UniformGrid>
+
+                    <!-- Row 4: Classificacao e Marca -->
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="4">
+                            <TextBlock FontWeight="SemiBold">Classificacao</TextBlock>
+                            <ComboBox x:Name="ClassComboBox" DisplayMemberPath="Display" SelectedValuePath="Id" SelectionChanged="ClassComboBox_SelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock FontWeight="SemiBold">Sub-classificacao</TextBlock>
+                            <ComboBox x:Name="SubClassComboBox" DisplayMemberPath="Display" SelectedValuePath="Id"/>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock FontWeight="SemiBold">Marca</TextBlock>
+                            <ComboBox x:Name="BrandComboBox" DisplayMemberPath="Display" SelectedValuePath="Id"/>
+                        </StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Cor</TextBlock><TextBox x:Name="ColorTextBox"/></StackPanel>
+                    </UniformGrid>
+
+                    <!-- Row 5: Voltagem -->
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Voltagem</TextBlock><ComboBox x:Name="VoltageComboBox">
+                            <ComboBoxItem Content="(nenhuma)" Tag=""/>
+                            <ComboBoxItem Content="110V" Tag="110V"/>
+                            <ComboBoxItem Content="220V" Tag="220V"/>
+                            <ComboBoxItem Content="Bivolt" Tag="BIVOLT"/>
+                        </ComboBox></StackPanel>
+                    </UniformGrid>
+
+                    <!-- Row 5: Peso e Dimensoes -->
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Peso (kg)</TextBlock><TextBox x:Name="WeightTextBox" Text="0"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Largura (cm)</TextBlock><TextBox x:Name="WidthTextBox" Text="0"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Altura (cm)</TextBlock><TextBox x:Name="HeightTextBox" Text="0"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Profundidade (cm)</TextBlock><TextBox x:Name="DepthTextBox" Text="0"/></StackPanel>
+                    </UniformGrid>
+
+                    <!-- Row 6: Imagem -->
+                    <UniformGrid Columns="2">
+                        <StackPanel Margin="4">
+                            <TextBlock FontWeight="SemiBold">Imagem do Produto</TextBlock>
+                            <DockPanel>
+                                <Button x:Name="SelectImageButton" DockPanel.Dock="Right" Padding="8,4" Margin="4,0,0,0" Click="SelectImage_Click">Selecionar...</Button>
+                                <TextBox x:Name="ImagePathTextBox" IsReadOnly="True" Background="#EEEEEE"/>
+                            </DockPanel>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <Image x:Name="ProductImage" MaxHeight="80" MaxWidth="120" HorizontalAlignment="Left" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </UniformGrid>
+
+                    <!-- Row 7: Campos dinamicos da classificacao -->
+                    <Border x:Name="CustomFieldsPanel" Margin="4,4,4,0" Padding="6" Background="#E8F0F8" CornerRadius="4" Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock x:Name="CustomFieldsTitle" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,4">Campos da Classificacao</TextBlock>
+                            <ItemsControl x:Name="CustomFieldsHost"/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,8,4,0">
+                        <Button x:Name="CancelFormButton" Margin="0,0,8,0" Padding="12,6" Click="CancelFormButton_Click">Cancelar</Button>
+                        <Button x:Name="SaveButton" Padding="12,6" Style="{StaticResource PrimaryButton}" Click="SaveButton_Click">Salvar</Button>
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <DataGrid Grid.Row="3" x:Name="ProductsGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionChanged="ProductsGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Codigo" Binding="{Binding Code}" Width="80"/>
+                <DataGridTextColumn Header="SKU" Binding="{Binding Sku}" Width="120"/>
+                <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="200"/>
+                <DataGridTextColumn Header="Classificacao" Binding="{Binding SubClassificationDisplay}" Width="150"/>
+                <DataGridTextColumn Header="Marca" Binding="{Binding BrandDisplay}" Width="100"/>
+                <DataGridTextColumn Header="Preco Venda" Binding="{Binding UnitPrice, StringFormat=N2}" Width="100"/>
+                <DataGridTextColumn Header="Cor" Binding="{Binding Color}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Ativo" Binding="{Binding IsActive}" Width="60"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

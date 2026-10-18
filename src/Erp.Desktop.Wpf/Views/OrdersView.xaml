@@ -1,0 +1,151 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.OrdersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,8">
+            <TextBlock FontSize="24" FontWeight="SemiBold" Foreground="#132A3A">Pedidos</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <Button Padding="14,6" Style="{StaticResource PrimaryButton}" Click="NewButton_Click">+ Novo</Button>
+                <Button x:Name="EditButton" Margin="8,0,0,0" Padding="14,6" Click="EditButton_Click" IsEnabled="False">&#9998; Editar</Button>
+            </StackPanel>
+        </DockPanel>
+
+        <Border x:Name="FormPanel" Grid.Row="1" Margin="0,0,0,10" Padding="10" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8" Visibility="Collapsed">
+            <StackPanel>
+                <TextBlock x:Name="FormTitle" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,6">Novo Pedido</TextBlock>
+                <UniformGrid Columns="4">
+                    <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Cliente *</TextBlock><ComboBox x:Name="CustomerComboBox"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Transportadora</TextBlock><ComboBox x:Name="CarrierComboBox"/></StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock FontWeight="SemiBold">Tipo Frete *</TextBlock>
+                        <ComboBox x:Name="FreightTypeComboBox">
+                            <ComboBoxItem Tag="CIF" IsSelected="True">CIF</ComboBoxItem>
+                            <ComboBoxItem Tag="FOB">FOB</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock FontWeight="SemiBold">Cond. Pagamento *</TextBlock>
+                        <ComboBox x:Name="PaymentTermComboBox">
+                            <ComboBoxItem Tag="A_VISTA" IsSelected="True">A Vista</ComboBoxItem>
+                            <ComboBoxItem Tag="30">30 dias</ComboBoxItem>
+                            <ComboBoxItem Tag="30/60">30/60 dias</ComboBoxItem>
+                            <ComboBoxItem Tag="30/60/90">30/60/90 dias</ComboBoxItem>
+                            <ComboBoxItem Tag="7/14/21/28">Semanal (7/14/21/28)</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </UniformGrid>
+                <UniformGrid Columns="4">
+                    <StackPanel Margin="4"><TextBlock>Produto</TextBlock><ComboBox x:Name="ProductComboBox" SelectionChanged="ProductComboBox_SelectionChanged"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Quantidade</TextBlock><TextBox x:Name="QuantityTextBox"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Unitario</TextBlock><TextBox x:Name="UnitPriceTextBox"/></StackPanel>
+                    <StackPanel Margin="4" VerticalAlignment="Bottom"><Button Padding="10,6" Click="AddItemButton_Click">Adicionar Item</Button></StackPanel>
+                </UniformGrid>
+                <DataGrid x:Name="DraftItemsGrid" Margin="4,8,4,4" Height="100" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Produto"  Binding="{Binding Description}"                   Width="*"/>
+                        <DataGridTextColumn Header="Qtd"      Binding="{Binding Quantity}"                      Width="80"/>
+                        <DataGridTextColumn Header="Unitario" Binding="{Binding UnitPrice, StringFormat=N2}"    Width="110"/>
+                        <DataGridTextColumn Header="Total"    Binding="{Binding LineTotal, StringFormat=N2}"    Width="110"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <UniformGrid Columns="4">
+                    <StackPanel Margin="4"><TextBlock>Desconto (%)</TextBlock><TextBox x:Name="DiscountTextBox" Text="0" TextChanged="DiscountTextBox_TextChanged"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Frete (R$)</TextBlock><TextBox x:Name="FreightTextBox" Text="0" TextChanged="FreightTextBox_TextChanged"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Subtotal</TextBlock><TextBlock x:Name="SubtotalTextBlock" FontSize="14">0,00</TextBlock></StackPanel>
+                    <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Total</TextBlock><TextBlock x:Name="TotalTextBlock" FontSize="14" Foreground="#1565C0">0,00</TextBlock></StackPanel>
+                </UniformGrid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,8,4,0">
+                    <Button Margin="0,0,8,0" Padding="12,6" Click="CancelFormButton_Click">Cancelar</Button>
+                    <Button Padding="12,6" Style="{StaticResource PrimaryButton}" Click="SaveOrderButton_Click">Salvar Pedido</Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Grid unificado: orcamentos + pedidos -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <DataGrid x:Name="OrdersGrid" SelectionChanged="OrdersGrid_SelectionChanged" IsReadOnly="True">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                        <Style.Triggers>
+                            <!-- Orcamento aguardando aprovacao = amarelo -->
+                            <DataTrigger Binding="{Binding Status}" Value="ABERTO_ORC">
+                                <Setter Property="Background" Value="#FFF8E1"/>
+                                <Setter Property="Foreground" Value="#795500"/>
+                            </DataTrigger>
+                            <!-- Orcamento reprovado = vermelho -->
+                            <DataTrigger Binding="{Binding Status}" Value="REPROVADO_ORC">
+                                <Setter Property="Background" Value="#FFEBEE"/>
+                                <Setter Property="Foreground" Value="#C62828"/>
+                            </DataTrigger>
+                            <!-- Pedido faturado = cinza -->
+                            <DataTrigger Binding="{Binding Status}" Value="FATURADO">
+                                <Setter Property="Foreground" Value="#888"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Tipo"       Binding="{Binding Tipo}"                                      Width="80"/>
+                    <DataGridTextColumn Header="Numero"    Binding="{Binding Number}"                                    Width="70"/>
+                    <DataGridTextColumn Header="Orcamento" Binding="{Binding SourceQuoteNumber}"                         Width="80"/>
+                    <DataGridTextColumn Header="Cliente"   Binding="{Binding CustomerName}"                              Width="*"/>
+                    <DataGridTextColumn Header="Total"     Binding="{Binding TotalAmount, StringFormat=C2}"              Width="110"/>
+                    <DataGridTextColumn Header="Status"    Binding="{Binding StatusDisplay}"                              Width="130"/>
+                    <DataGridTextColumn Header="Frete"     Binding="{Binding FreightType}"                               Width="55"/>
+                    <DataGridTextColumn Header="Pagamento" Binding="{Binding PaymentTerm}"                               Width="110"/>
+                    <DataGridTextColumn Header="Criado"    Binding="{Binding CreatedAt, StringFormat=dd/MM/yyyy HH:mm}" Width="125"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Painel de aprovacao de orcamento (aparece quando selecionado orcamento pendente) -->
+            <Border x:Name="ApprovalPanel" Grid.Row="1" Margin="0,8,0,0" Padding="10" Background="#FFF8E1" BorderBrush="#FFE082" BorderThickness="1" CornerRadius="8" Visibility="Collapsed">
+                <StackPanel>
+                    <TextBlock FontWeight="SemiBold" Foreground="#795500" Margin="0,0,0,8">Aprovar Orcamento</TextBlock>
+                    <UniformGrid Columns="4">
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Transportadora</TextBlock><ComboBox x:Name="ApprovalCarrierComboBox"/></StackPanel>
+                        <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Frete (R$) *</TextBlock><TextBox x:Name="ApprovalFreightTextBox" Text="0"/></StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock FontWeight="SemiBold">Tipo Frete *</TextBlock>
+                            <ComboBox x:Name="ApprovalFreightTypeComboBox">
+                                <ComboBoxItem Tag="CIF" IsSelected="True">CIF</ComboBoxItem>
+                                <ComboBoxItem Tag="FOB">FOB</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Margin="4">
+                            <TextBlock FontWeight="SemiBold">Cond. Pagamento *</TextBlock>
+                            <ComboBox x:Name="ApprovalPaymentTermComboBox">
+                                <ComboBoxItem Tag="A_VISTA" IsSelected="True">A Vista</ComboBoxItem>
+                                <ComboBoxItem Tag="30">30 dias</ComboBoxItem>
+                                <ComboBoxItem Tag="30/60">30/60 dias</ComboBoxItem>
+                                <ComboBoxItem Tag="30/60/90">30/60/90 dias</ComboBoxItem>
+                                <ComboBoxItem Tag="7/14/21/28">Semanal (7/14/21/28)</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                    </UniformGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button x:Name="RejectQuoteButton" Margin="0,0,8,0" Padding="12,6" Style="{StaticResource DangerButton}" Click="RejectQuoteButton_Click">Reprovar Orcamento</Button>
+                        <Button x:Name="ApproveQuoteButton" Padding="12,6" Style="{StaticResource SuccessButton}" Click="ApproveQuoteButton_Click">Aprovar como Pedido</Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Acoes de pedido (liberar para NF) -->
+            <StackPanel x:Name="OrderActionsPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0" Visibility="Collapsed">
+                <TextBlock x:Name="OrderActionHintTextBlock" Margin="0,0,12,0" VerticalAlignment="Center" Foreground="#2F4A5D"/>
+                <Button x:Name="ApproveForInvoiceButton" Padding="12,6" Style="{StaticResource SuccessButton}" Click="ApproveForInvoiceButton_Click">Liberar para Nota Fiscal</Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

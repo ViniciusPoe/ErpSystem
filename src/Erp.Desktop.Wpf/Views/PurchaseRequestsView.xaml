@@ -1,0 +1,60 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.PurchaseRequestsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+        <DockPanel Margin="0,0,0,8">
+            <TextBlock FontSize="24" FontWeight="SemiBold" Foreground="#132A3A">Solicitacoes de Compra</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <Button Padding="14,6" Style="{StaticResource PrimaryButton}" Click="NewButton_Click">+ Novo</Button>
+            </StackPanel>
+        </DockPanel>
+
+        <Border x:Name="FormPanel" Grid.Row="1" Margin="0,0,0,10" Padding="10" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8" Visibility="Collapsed">
+            <StackPanel>
+                <UniformGrid Columns="3">
+                    <StackPanel Margin="4"><TextBlock>Produto *</TextBlock><ComboBox x:Name="ProductComboBox"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Quantidade *</TextBlock><TextBox x:Name="QuantityTextBox"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Observacao/Link</TextBlock><TextBox x:Name="NotesTextBox"/></StackPanel>
+                </UniformGrid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,8,4,0">
+                    <Button Margin="0,0,8,0" Padding="12,6" Click="CancelFormButton_Click">Cancelar</Button>
+                    <Button Padding="12,6" Style="{StaticResource PrimaryButton}" Click="CreateRequestButton_Click">Criar Solicitacao</Button>
+                </StackPanel>
+                <TextBlock Margin="4,8,4,0" Foreground="#2F4A5D">Aprovacao/recusa da solicitacao e feita na tela "Ordem de Compra".</TextBlock>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="2" x:Name="RequestsGrid" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding DisplayStatus}" Value="AGUARDANDO_ENTREGA">
+                            <Setter Property="Foreground" Value="#F9A825"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DisplayStatus}" Value="ENTREGUE">
+                            <Setter Property="Foreground" Value="#2E7D32"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DisplayStatus}" Value="RECUSADA">
+                            <Setter Property="Foreground" Value="#C62828"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DisplayStatus}" Value="CANCELADA">
+                            <Setter Property="Foreground" Value="#C62828"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="60"/>
+                <DataGridTextColumn Header="Produto" Binding="{Binding ProductSku}" Width="150"/>
+                <DataGridTextColumn Header="Qtd Solicitada" Binding="{Binding RequestedQuantity}" Width="120"/>
+                <DataGridTextColumn Header="Aprovacao" Binding="{Binding ApprovalStatus}" Width="120"/>
+                <DataGridTextColumn Header="Fornecedor" Binding="{Binding SupplierName}" Width="180"/>
+                <DataGridTextColumn Header="Qtd Aprovada" Binding="{Binding ApprovedQuantity}" Width="110"/>
+                <DataGridTextColumn Header="Vlr Aprovado" Binding="{Binding ApprovedUnitPrice}" Width="110"/>
+                <DataGridTextColumn Header="Entrega" Binding="{Binding DeliveryStatus}" Width="110"/>
+                <DataGridTextColumn Header="Obs" Binding="{Binding Notes}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,110 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.AccountsPayableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,8">
+            <TextBlock FontSize="24" FontWeight="SemiBold" Foreground="#132A3A">Financeiro - Contas a Pagar</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <Button Padding="14,6" Style="{StaticResource PrimaryButton}" Click="NewButton_Click">+ Novo</Button>
+                <Button x:Name="EditButton" Margin="8,0,0,0" Padding="14,6" Click="EditButton_Click" IsEnabled="False">&#9998; Editar</Button>
+            </StackPanel>
+        </DockPanel>
+
+        <Border x:Name="FormPanel" Grid.Row="1" Margin="0,0,0,8" Padding="10" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8" Visibility="Collapsed">
+            <StackPanel>
+                <UniformGrid Columns="3">
+                    <StackPanel Margin="4"><TextBlock>Descricao *</TextBlock><TextBox x:Name="DescriptionTextBox"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Fornecedor</TextBlock><ComboBox x:Name="SupplierComboBox"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock x:Name="AmountLabel">Valor total *</TextBlock><TextBox x:Name="AmountTextBox"/></StackPanel>
+                </UniformGrid>
+
+                <UniformGrid x:Name="ManualFields" Columns="2">
+                    <StackPanel Margin="4">
+                        <TextBlock>Cond. Pagamento *</TextBlock>
+                        <ComboBox x:Name="PaymentTermComboBox">
+                            <ComboBoxItem Tag="A_VISTA" IsSelected="True">A Vista</ComboBoxItem>
+                            <ComboBoxItem Tag="30">30 dias</ComboBoxItem>
+                            <ComboBoxItem Tag="30/60">30/60 dias</ComboBoxItem>
+                            <ComboBoxItem Tag="30/60/90">30/60/90 dias</ComboBoxItem>
+                            <ComboBoxItem Tag="7/14/21/28">Semanal (7/14/21/28)</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Base vencimento</TextBlock><DatePicker x:Name="DueDatePicker"/></StackPanel>
+                </UniformGrid>
+
+                <UniformGrid x:Name="SubscriptionFields" Columns="2" Visibility="Collapsed">
+                    <StackPanel Margin="4"><TextBlock>Inicio</TextBlock><DatePicker x:Name="StartDatePicker"/></StackPanel>
+                    <StackPanel Margin="4"><TextBlock>Meses a gerar</TextBlock><TextBox x:Name="MonthsTextBox" Text="12"/></StackPanel>
+                </UniformGrid>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                    <CheckBox x:Name="IsSubscriptionCheckBox" VerticalAlignment="Center" Margin="0,0,16,0"
+                              Checked="IsSubscriptionCheckBox_Changed" Unchecked="IsSubscriptionCheckBox_Changed">
+                        Assinatura?
+                    </CheckBox>
+                    <Button Margin="0,0,8,0" Padding="12,6" Click="CancelFormButton_Click">Cancelar</Button>
+                    <Button Padding="12,6" Style="{StaticResource PrimaryButton}" Click="SavePayableButton_Click">Salvar</Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Margin="0,0,0,8" Padding="8" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8">
+            <StackPanel>
+                <TextBlock FontWeight="SemiBold" Margin="0,0,0,4">Assinaturas / Mensalidades</TextBlock>
+                <DataGrid x:Name="RecurringGrid" Height="120" SelectionChanged="RecurringGrid_SelectionChanged">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="False">
+                                    <Setter Property="Foreground" Value="#AAA"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Descricao" Binding="{Binding Description}" Width="*"/>
+                        <DataGridTextColumn Header="Fornecedor" Binding="{Binding SupplierName}" Width="160"/>
+                        <DataGridTextColumn Header="Vlr Mensal" Binding="{Binding MonthlyAmount, StringFormat=C2}" Width="110"/>
+                        <DataGridTextColumn Header="Inicio" Binding="{Binding StartDate, StringFormat=dd/MM/yyyy}" Width="90"/>
+                        <DataGridTextColumn Header="Ativa" Binding="{Binding IsActive}" Width="60"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="3" x:Name="PayablesGrid" SelectionChanged="PayablesGrid_SelectionChanged">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="PAGO">
+                            <Setter Property="Foreground" Value="#AAA"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="60"/>
+                <DataGridTextColumn Header="Descricao" Binding="{Binding Description}" Width="*"/>
+                <DataGridTextColumn Header="Fornecedor" Binding="{Binding SupplierName}" Width="160"/>
+                <DataGridTextColumn Header="Parcela" Binding="{Binding InstallmentNumber}" Width="70"/>
+                <DataGridTextColumn Header="Vencimento" Binding="{Binding DueDate, StringFormat=dd/MM/yyyy}" Width="100"/>
+                <DataGridTextColumn Header="Valor" Binding="{Binding Amount, StringFormat=C2}" Width="110"/>
+                <DataGridTextColumn Header="Pagamento" Binding="{Binding PaymentTerm}" Width="110"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="90"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel x:Name="EditActionsPanel" Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0" Visibility="Collapsed">
+            <Button x:Name="CancelRecurringButton" Margin="0,0,8,0" Padding="12,6" Style="{StaticResource DangerButton}" Click="CancelRecurringButton_Click">Cancelar Assinatura</Button>
+            <Button x:Name="MarkPaidButton" Padding="12,6" Style="{StaticResource SuccessButton}" Click="MarkPaidButton_Click">Marcar como Pago</Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

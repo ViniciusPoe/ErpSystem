@@ -1,0 +1,98 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.ProductClassificationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Col 0: Classificacoes -->
+        <Border Margin="0,0,4,0" Padding="8" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,6">Classificacoes</TextBlock>
+                <StackPanel Grid.Row="1" Margin="0,0,0,6">
+                    <UniformGrid Columns="2" Margin="0,0,0,4">
+                        <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Codigo</TextBlock><TextBox x:Name="ClassCodeTextBox" FontSize="12"/></StackPanel>
+                        <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Nome</TextBlock><TextBox x:Name="ClassNameTextBox" FontSize="12"/></StackPanel>
+                    </UniformGrid>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Padding="8,4" Style="{StaticResource PrimaryButton}" Click="AddClassification_Click" FontSize="11">+ Adicionar</Button>
+                        <Button x:Name="UpdateClassButton" Padding="8,4" Margin="4,0,0,0" Click="UpdateClassification_Click" IsEnabled="False" FontSize="11">Atualizar</Button>
+                        <Button x:Name="DeleteClassButton" Padding="8,4" Margin="4,0,0,0" Style="{StaticResource DangerButton}" Click="DeleteClassification_Click" IsEnabled="False" FontSize="11">Excluir</Button>
+                    </StackPanel>
+                </StackPanel>
+                <DataGrid Grid.Row="2" x:Name="ClassGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionChanged="ClassGrid_SelectionChanged" FontSize="12">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Codigo" Binding="{Binding Code}" Width="60"/>
+                        <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Col 1: Sub-classificacoes -->
+        <Border Grid.Column="1" Margin="4,0,4,0" Padding="8" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="SubClassTitle" FontSize="16" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,6">Sub-classificacoes</TextBlock>
+                <StackPanel Grid.Row="1" Margin="0,0,0,6">
+                    <UniformGrid Columns="2" Margin="0,0,0,4">
+                        <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Codigo</TextBlock><TextBox x:Name="SubCodeTextBox" FontSize="12"/></StackPanel>
+                        <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Nome</TextBlock><TextBox x:Name="SubNameTextBox" FontSize="12"/></StackPanel>
+                    </UniformGrid>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="AddSubButton" Padding="8,4" Style="{StaticResource PrimaryButton}" Click="AddSubClassification_Click" IsEnabled="False" FontSize="11">+ Adicionar</Button>
+                        <Button x:Name="UpdateSubButton" Padding="8,4" Margin="4,0,0,0" Click="UpdateSubClassification_Click" IsEnabled="False" FontSize="11">Atualizar</Button>
+                        <Button x:Name="DeleteSubButton" Padding="8,4" Margin="4,0,0,0" Style="{StaticResource DangerButton}" Click="DeleteSubClassification_Click" IsEnabled="False" FontSize="11">Excluir</Button>
+                    </StackPanel>
+                </StackPanel>
+                <DataGrid Grid.Row="2" x:Name="SubClassGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionChanged="SubClassGrid_SelectionChanged" FontSize="12">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Codigo" Binding="{Binding Code}" Width="70"/>
+                        <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+
+        <!-- Col 2: Campos personalizados -->
+        <Border Grid.Column="2" Margin="4,0,0,0" Padding="8" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="FieldsTitle" FontSize="16" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,6">Campos Personalizados</TextBlock>
+                <StackPanel Grid.Row="1" Margin="0,0,0,6">
+                    <UniformGrid Columns="2" Margin="0,0,0,4">
+                        <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Nome do Campo</TextBlock><TextBox x:Name="FieldNameTextBox" FontSize="12"/></StackPanel>
+                        <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Obrigatorio?</TextBlock><CheckBox x:Name="FieldRequiredCheckBox" VerticalAlignment="Center" Margin="0,4,0,0"/></StackPanel>
+                    </UniformGrid>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="AddFieldButton" Padding="8,4" Style="{StaticResource PrimaryButton}" Click="AddField_Click" IsEnabled="False" FontSize="11">+ Adicionar</Button>
+                        <Button x:Name="UpdateFieldButton" Padding="8,4" Margin="4,0,0,0" Click="UpdateField_Click" IsEnabled="False" FontSize="11">Atualizar</Button>
+                        <Button x:Name="DeleteFieldButton" Padding="8,4" Margin="4,0,0,0" Style="{StaticResource DangerButton}" Click="DeleteField_Click" IsEnabled="False" FontSize="11">Excluir</Button>
+                    </StackPanel>
+                </StackPanel>
+                <DataGrid Grid.Row="2" x:Name="FieldsGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionChanged="FieldsGrid_SelectionChanged" FontSize="12">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Campo" Binding="{Binding FieldName}" Width="*"/>
+                        <DataGridCheckBoxColumn Header="Obrig." Binding="{Binding IsRequired}" Width="60"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

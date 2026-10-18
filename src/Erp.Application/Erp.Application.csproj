@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Erp.Domain\Erp.Domain.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Sales\Erp.Modules.Sales.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Invoicing\Erp.Modules.Invoicing.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Service\Erp.Modules.Service.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Finance\Erp.Modules.Finance.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Inventory\Erp.Modules.Inventory.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,64 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.MunicipalityCatalogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="0,0,0,8">
+            <TextBlock FontSize="24" FontWeight="SemiBold" Foreground="#132A3A">Cadastro de Municipios</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                <Button Padding="14,6" Style="{StaticResource PrimaryButton}" Click="NewButton_Click">+ Novo</Button>
+                <Button x:Name="EditButton" Margin="8,0,0,0" Padding="14,6" Click="EditButton_Click" IsEnabled="False">&#9998; Editar</Button>
+                <Button x:Name="DeleteButton" Margin="8,0,0,0" Padding="14,6" Style="{StaticResource DangerButton}" Click="DeleteButton_Click" IsEnabled="False">Excluir</Button>
+            </StackPanel>
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Margin="0,0,0,8" LastChildFill="False">
+            <TextBox x:Name="SearchTextBox" Width="260" Padding="8,4" TextChanged="SearchTextBox_TextChanged" ToolTip="Buscar por codigo, cidade, UF ou pais"/>
+        </DockPanel>
+
+        <Border x:Name="FormPanel" Grid.Row="2" Margin="0,0,0,10" Padding="10" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8" Visibility="Collapsed">
+            <StackPanel>
+                <TextBlock x:Name="FormTitle" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,6">Novo Municipio</TextBlock>
+                <UniformGrid Columns="4" Margin="0,0,0,0">
+                    <StackPanel Margin="4"><TextBlock FontWeight="SemiBold">Codigo * (automatico)</TextBlock><TextBox x:Name="CodeTextBox" MaxLength="30" IsReadOnly="True" Background="#EEEEEE"/></StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock FontWeight="SemiBold">Pais *</TextBlock>
+                        <ComboBox x:Name="CountryComboBox" IsEditable="True" SelectionChanged="CountryComboBox_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock FontWeight="SemiBold">UF / Estado *</TextBlock>
+                        <ComboBox x:Name="StateComboBox" IsEditable="True" SelectionChanged="StateComboBox_SelectionChanged"/>
+                    </StackPanel>
+                    <StackPanel Margin="4">
+                        <TextBlock FontWeight="SemiBold">Cidade *</TextBlock>
+                        <ComboBox x:Name="CityComboBox" IsEditable="True"/>
+                    </StackPanel>
+                </UniformGrid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="4,8,4,0">
+                    <Button Margin="0,0,8,0" Padding="12,6" Click="CancelFormButton_Click">Cancelar</Button>
+                    <Button Padding="12,6" Style="{StaticResource PrimaryButton}" Click="SaveButton_Click">Salvar</Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="3"
+                  x:Name="MunicipalitiesGrid"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionChanged="MunicipalitiesGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Codigo" Binding="{Binding Code}" Width="100"/>
+                <DataGridTextColumn Header="Pais" Binding="{Binding Country}" Width="120"/>
+                <DataGridTextColumn Header="UF / Estado" Binding="{Binding State}" Width="120"/>
+                <DataGridTextColumn Header="Cidade" Binding="{Binding Name}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

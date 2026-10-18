@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Erp.Application\Erp.Application.csproj" />
+    <ProjectReference Include="..\Erp.Domain\Erp.Domain.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Inventory\Erp.Modules.Inventory.csproj" />
+    <ProjectReference Include="..\Erp.Modules.Sales\Erp.Modules.Sales.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySqlConnector" Version="2.4.0" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

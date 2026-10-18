@@ -1,0 +1,164 @@
+<Application x:Class="Erp.Desktop.Wpf.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Erp.Desktop.Wpf"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+
+        <!-- Paleta de cores -->
+        <SolidColorBrush x:Key="PrimaryBrush"    Color="#1565C0"/>
+        <SolidColorBrush x:Key="PrimaryHoverBrush" Color="#0D47A1"/>
+        <SolidColorBrush x:Key="DangerBrush"     Color="#C62828"/>
+        <SolidColorBrush x:Key="DangerHoverBrush" Color="#B71C1C"/>
+        <SolidColorBrush x:Key="SuccessBrush"    Color="#2E7D32"/>
+        <SolidColorBrush x:Key="SuccessHoverBrush" Color="#1B5E20"/>
+        <SolidColorBrush x:Key="NeutralBrush"    Color="#E3EAF0"/>
+        <SolidColorBrush x:Key="NeutralHoverBrush" Color="#CFD8E3"/>
+        <SolidColorBrush x:Key="SidebarBtnBrush"  Color="#1C3D52"/>
+        <SolidColorBrush x:Key="SidebarHoverBrush" Color="#274F68"/>
+
+        <!-- Template base de botao arredondado -->
+        <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="Button">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="Transparent"
+                    BorderThickness="2"
+                    CornerRadius="6"
+                    Padding="{TemplateBinding Padding}"
+                    SnapsToDevicePixels="True">
+                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="border" Property="Opacity" Value="0.87"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border" Property="Opacity" Value="0.75"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="border" Property="Opacity" Value="0.38"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter TargetName="border" Property="BorderBrush" Value="#FFB300"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- Estilo global de botao (neutro/cinza) -->
+        <Style TargetType="Button">
+            <Setter Property="Background"            Value="{StaticResource NeutralBrush}"/>
+            <Setter Property="Foreground"            Value="#132A3A"/>
+            <Setter Property="BorderThickness"       Value="0"/>
+            <Setter Property="Padding"               Value="12,6"/>
+            <Setter Property="FontSize"              Value="13"/>
+            <Setter Property="Cursor"                Value="Hand"/>
+            <Setter Property="Template"              Value="{StaticResource RoundedButtonTemplate}"/>
+        </Style>
+
+        <!-- Botao primario (azul) -->
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Botao de perigo/exclusao (vermelho) -->
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource DangerBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Botao de sucesso/confirmacao (verde) -->
+        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource SuccessBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <!-- Botao da barra lateral (transparente/escuro) -->
+        <Style x:Key="SidebarButton" TargetType="Button">
+            <Setter Property="Background"       Value="Transparent"/>
+            <Setter Property="Foreground"       Value="#CFE2EF"/>
+            <Setter Property="BorderThickness"  Value="0"/>
+            <Setter Property="Padding"          Value="10,7"/>
+            <Setter Property="FontSize"         Value="13"/>
+            <Setter Property="Cursor"           Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent"
+                                BorderThickness="2"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{StaticResource SidebarHoverBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FFB300"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TextBox moderno -->
+        <Style TargetType="TextBox">
+            <Setter Property="Padding"                Value="6,4"/>
+            <Setter Property="BorderBrush"            Value="#B0C4D4"/>
+            <Setter Property="BorderThickness"        Value="1"/>
+            <Setter Property="Background"             Value="White"/>
+            <Setter Property="Height"                 Value="28"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize"               Value="13"/>
+        </Style>
+
+        <!-- ComboBox altura consistente -->
+        <Style TargetType="ComboBox">
+            <Setter Property="Height"   Value="28"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding"  Value="4,2"/>
+        </Style>
+
+        <!-- DataGrid com linhas alternadas -->
+        <Style TargetType="DataGrid">
+            <Setter Property="RowBackground"            Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F4F8FB"/>
+            <Setter Property="GridLinesVisibility"      Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#DDE8F0"/>
+            <Setter Property="BorderThickness"          Value="1"/>
+            <Setter Property="BorderBrush"              Value="#C8D8E4"/>
+            <Setter Property="HeadersVisibility"        Value="Column"/>
+            <Setter Property="SelectionMode"            Value="Single"/>
+            <Setter Property="AutoGenerateColumns"      Value="False"/>
+            <Setter Property="IsReadOnly"               Value="True"/>
+            <Setter Property="FontSize"                 Value="13"/>
+        </Style>
+
+        <!-- Cabecalho de DataGrid -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background"   Value="#E8F0F6"/>
+            <Setter Property="Foreground"   Value="#1E3A50"/>
+            <Setter Property="FontWeight"   Value="SemiBold"/>
+            <Setter Property="Padding"      Value="8,5"/>
+            <Setter Property="BorderBrush"  Value="#C8D8E4"/>
+            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        </Style>
+
+        <!-- DatePicker altura consistente -->
+        <Style TargetType="DatePicker">
+            <Setter Property="Height"   Value="28"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+    </Application.Resources>
+</Application>

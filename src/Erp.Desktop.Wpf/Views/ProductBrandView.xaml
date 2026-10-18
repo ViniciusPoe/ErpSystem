@@ -1,0 +1,34 @@
+<UserControl x:Class="Erp.Desktop.Wpf.Views.ProductBrandView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock FontSize="24" FontWeight="SemiBold" Foreground="#132A3A" Margin="0,0,0,8">Marcas de Produto</TextBlock>
+
+        <Border Grid.Row="1" Padding="8" Background="#F3F8FC" BorderBrush="#D6E1EA" BorderThickness="1" CornerRadius="8" Margin="0,0,0,8">
+            <StackPanel>
+                <UniformGrid Columns="2" Margin="0,0,0,4">
+                    <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Codigo *</TextBlock><TextBox x:Name="CodeTextBox" FontSize="12"/></StackPanel>
+                    <StackPanel Margin="2"><TextBlock FontWeight="SemiBold" FontSize="11">Nome *</TextBlock><TextBox x:Name="NameTextBox" FontSize="12"/></StackPanel>
+                </UniformGrid>
+                <StackPanel Orientation="Horizontal">
+                    <Button Padding="8,4" Style="{StaticResource PrimaryButton}" Click="AddBrand_Click" FontSize="11">+ Adicionar</Button>
+                    <Button x:Name="UpdateButton" Padding="8,4" Margin="4,0,0,0" Click="UpdateBrand_Click" IsEnabled="False" FontSize="11">Atualizar</Button>
+                    <Button x:Name="DeleteButton" Padding="8,4" Margin="4,0,0,0" Style="{StaticResource DangerButton}" Click="DeleteBrand_Click" IsEnabled="False" FontSize="11">Excluir</Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <DataGrid Grid.Row="2" x:Name="BrandsGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectionChanged="BrandsGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Codigo" Binding="{Binding Code}" Width="120"/>
+                <DataGridTextColumn Header="Nome" Binding="{Binding Name}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
